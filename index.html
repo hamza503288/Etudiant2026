@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>STARCARE Étudiant | STAR Assurances</title>
 <meta name="description" content="STARCARE Étudiant - L'assurance santé qui accompagne votre réussite. 250 DT TTC / an.">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preload" href="assets/logo-star-assurances.png" as="image">
+<link rel="preload" href="assets/hero-photo.webp" as="image">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"></noscript>
 
 <style>
   :root{
@@ -595,7 +599,7 @@
 <div class="wrap">
 
   <header>
-    <img class="logo-mark" src="assets/logo-star-assurances.png" alt="STAR Assurances">
+    <img class="logo-mark" src="assets/logo-star-assurances.png" alt="STAR Assurances" fetchpriority="high" decoding="async">
     <div class="badge"><i class="fa-solid fa-star"></i> NOUVEAUTÉ</div>
     <h1 class="title">STARCARE <span class="accent">ÉTUDIANT</span></h1>
     <p class="subtitle">L'assurance santé qui accompagne votre réussite</p>
@@ -603,7 +607,7 @@
   </header>
 
   <div class="hero-photo reveal">
-    <img src="assets/hero-photo.jpg" alt="Étudiant souriant avec sac à dos, assurance STARCARE Étudiant STAR Assurances" loading="lazy">
+    <img src="assets/hero-photo.webp" alt="Étudiant souriant avec sac à dos, assurance STARCARE Étudiant STAR Assurances" width="526" height="526" fetchpriority="high" decoding="async">
   </div>
 
   <section class="price-card reveal">
@@ -671,7 +675,7 @@
   </div>
 
   <div class="parent-card reveal">
-    <img class="photo" src="assets/etudiante-photo.jpg" alt="Étudiante souriante sur le campus, assurée STARCARE Étudiant">
+    <img class="photo" src="assets/etudiante-photo.webp" alt="Étudiante souriante sur le campus, assurée STARCARE Étudiant" width="1200" height="1592" loading="lazy" decoding="async">
     <div class="body">
       <i class="fa-solid fa-heart heart"></i>
       <p>Parents, la tranquillité d'esprit commence par la santé de vos enfants. Pour seulement <strong>250 DT TTC / an</strong>, offrez à votre étudiant une protection complète face aux imprévus de la vie universitaire — consultations, pharmacie, hospitalisation et bien plus.</p>
@@ -722,20 +726,44 @@
     btn.setAttribute("rel", "noopener noreferrer");
   });
 
-  // ---------- STATS (localStorage) ----------
-  var VIEW_KEY = "starcare_views";
-  var CLICK_KEY = "starcare_clicks";
+  // ---------- STATS (shared across all devices via a free counter API) ----------
+  // localStorage only tracks the current browser/device; to see one total
+  // across every visitor's phone/desktop we need a value stored server-side.
+  // countapi.xyz is a free, no-signup hit-counter API used here for that.
+  var COUNTER_NS = "starcare-etudiant-star-assurances-2026";
+  var VIEW_KEY = "views";
+  var CLICK_KEY = "clicks";
+  var CACHE_PREFIX = "starcare_cache_"; // last-known values, for instant paint + offline fallback
 
-  function getCount(key){
-    var v = parseInt(localStorage.getItem(key), 10);
+  function cacheGet(key){
+    var v = parseInt(localStorage.getItem(CACHE_PREFIX + key), 10);
     return isNaN(v) ? 0 : v;
   }
-  function setCount(key, val){
-    localStorage.setItem(key, String(val));
+  function cacheSet(key, val){
+    try{ localStorage.setItem(CACHE_PREFIX + key, String(val)); }catch(e){}
+  }
+  function renderCount(key, val){
+    var el = document.getElementById(key === VIEW_KEY ? "viewCount" : "clickCount");
+    if(el) el.textContent = val;
+    cacheSet(key, val);
   }
   function renderStats(){
-    document.getElementById("viewCount").textContent = getCount(VIEW_KEY);
-    document.getElementById("clickCount").textContent = getCount(CLICK_KEY);
+    renderCount(VIEW_KEY, cacheGet(VIEW_KEY));
+    renderCount(CLICK_KEY, cacheGet(CLICK_KEY));
+  }
+  // increments the shared remote counter by 1 and repaints with the new total
+  function remoteHit(key){
+    fetch("https://api.countapi.xyz/hit/" + COUNTER_NS + "/" + key)
+      .then(function(r){ return r.json(); })
+      .then(function(data){ renderCount(key, data.value); })
+      .catch(function(){ /* offline / API unreachable: keep last cached value */ });
+  }
+  // re-reads the current shared total without incrementing (used to refresh the admin panel)
+  function remoteRefresh(key){
+    fetch("https://api.countapi.xyz/get/" + COUNTER_NS + "/" + key)
+      .then(function(r){ return r.json(); })
+      .then(function(data){ if(data && typeof data.value === "number") renderCount(key, data.value); })
+      .catch(function(){});
   }
 
   // stats are hidden from regular visitors; admin reveals them via the
@@ -744,7 +772,13 @@
   var statsBar = document.getElementById("statsBar");
 
   function applyAdminState(){
-    statsBar.classList.toggle("is-admin", localStorage.getItem(ADMIN_FLAG) === "1");
+    var isAdmin = localStorage.getItem(ADMIN_FLAG) === "1";
+    statsBar.classList.toggle("is-admin", isAdmin);
+    if(isAdmin){
+      // pull the latest shared totals (other devices may have hit them since our last fetch)
+      remoteRefresh(VIEW_KEY);
+      remoteRefresh(CLICK_KEY);
+    }
   }
 
   var params = new URLSearchParams(window.location.search);
@@ -759,19 +793,19 @@
     applyAdminState();
   });
 
-  // page view tracking (once per session to avoid inflating on SPA-like reloads)
+  // page view tracking (once per session to avoid inflating on repeat reloads),
+  // counted against the shared cross-device total
+  renderStats(); // paint last-known cached numbers instantly, then refresh from the network
   var SESSION_VIEW_FLAG = "starcare_view_logged_session";
   if(!sessionStorage.getItem(SESSION_VIEW_FLAG)){
-    setCount(VIEW_KEY, getCount(VIEW_KEY) + 1);
+    remoteHit(VIEW_KEY);
     sessionStorage.setItem(SESSION_VIEW_FLAG, "1");
   }
-  renderStats();
 
   // click tracking + micro-interaction: scale on press (all WhatsApp CTAs)
   waCtas.forEach(function(btn){
     btn.addEventListener("click", function(){
-      setCount(CLICK_KEY, getCount(CLICK_KEY) + 1);
-      renderStats();
+      remoteHit(CLICK_KEY);
       try{
         console.log("[STARCARE tracking] WhatsApp CTA clicked at " + new Date().toISOString());
       }catch(e){}
