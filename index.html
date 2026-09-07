@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>STARCARE Étudiant | STAR Assurances</title>
+<meta name="description" content="STARCARE Étudiant - L'assurance santé qui accompagne votre réussite. 250 DT TTC / an.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f2f8f4;
+    --green:#1a5c45;
+    --green-deep:#123c2d;
+    --lime:#b7d235;
+    --gold:#c9a227;
+    --gold-soft:#e7cf7a;
+    --text:#1f2a25;
+    --text-muted:#5f7269;
+    --border:#e3ede6;
+    --radius:16px;
+    --shadow:0 12px 28px rgba(20,60,45,0.10);
+    --shadow-sm:0 4px 14px rgba(20,60,45,0.08);
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  img,svg{max-width:100%;}
+
+  .wrap{
+    max-width:520px;
+    margin:0 auto;
+    padding:0 20px 40px;
+  }
+  @media (min-width:768px){ .wrap{max-width:720px;} }
+  @media (min-width:1100px){ .wrap{max-width:980px;} }
+
+  /* ---------- Header ---------- */
+  header{
+    text-align:center;
+    padding:28px 0 10px;
+  }
+
+  .logo-mark{
+    max-width:260px;
+    width:70%;
+    margin:0 auto 22px;
+    display:block;
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--lime);
+    color:var(--green-deep);
+    font-weight:800;
+    font-size:.72rem;
+    letter-spacing:1.5px;
+    padding:7px 18px;
+    border-radius:999px;
+    animation:fadeDown .7s var(--ease) both;
+  }
+  .badge i{font-size:.85rem;}
+
+  h1.title{
+    margin:16px 0 6px;
+    font-size:clamp(1.9rem,7vw,3rem);
+    font-weight:900;
+    letter-spacing:.5px;
+    line-height:1.1;
+    color:var(--green);
+    animation:fadeUp .8s .1s var(--ease) both;
+  }
+  h1.title .accent{color:var(--gold);}
+
+  .subtitle{
+    max-width:480px;
+    margin:0 auto;
+    font-size:clamp(.85rem,2.6vw,1.05rem);
+    font-weight:600;
+    letter-spacing:.5px;
+    color:var(--text-muted);
+    line-height:1.5;
+    animation:fadeUp .8s .2s var(--ease) both;
+  }
+
+  .allstar-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:18px;
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    color:var(--green);
+    font-weight:700;
+    font-size:.9rem;
+    letter-spacing:.5px;
+    padding:9px 18px;
+    border-radius:999px;
+    animation:fadeUp .8s .3s var(--ease) both;
+  }
+  .allstar-badge i{font-size:.85rem; color:var(--gold);}
+
+  @keyframes fadeDown{from{opacity:0; transform:translateY(-16px);} to{opacity:1; transform:translateY(0);}}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ---------- Hero photo ---------- */
+  .hero-photo{
+    margin:26px 0 0;
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+  }
+  .hero-photo img{
+    display:block;
+    width:100%;
+    max-height:680px;
+    object-fit:contain;
+    background:var(--bg-soft);
+  }
+
+  /* ---------- Pricing card ---------- */
+  .price-card{
+    margin:28px 0;
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    border-top:4px solid var(--gold);
+    border-radius:var(--radius);
+    padding:30px 24px;
+    text-align:center;
+    box-shadow:var(--shadow-sm);
+    animation:fadeUp .8s .35s var(--ease) both;
+  }
+  .price-card .label{
+    font-size:.8rem;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    font-weight:700;
+    margin-bottom:10px;
+  }
+  .price-value{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:8px;
+    line-height:1;
+  }
+  .price-value .amount{
+    font-size:clamp(3rem,12vw,4.5rem);
+    font-weight:900;
+    color:var(--gold);
+  }
+  .price-value .unit{
+    font-size:clamp(1.1rem,4vw,1.4rem);
+    font-weight:800;
+    color:var(--gold);
+    margin-bottom:.6em;
+  }
+  .price-value .per{
+    font-size:1rem;
+    font-weight:600;
+    color:var(--text-muted);
+    margin-bottom:.7em;
+  }
+  .price-note{
+    margin-top:10px;
+    font-size:.9rem;
+    color:var(--text-muted);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .price-note i{color:var(--green);}
+
+  /* ---------- Care card (carte de prise en charge) ---------- */
+  .care-card{
+    margin-top:22px;
+    border-radius:var(--radius);
+    padding:24px 22px;
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    box-shadow:var(--shadow-sm);
+    position:relative;
+    overflow:hidden;
+  }
+  .care-card-watermark{
+    position:absolute;
+    right:-14px;
+    bottom:-20px;
+    font-size:6rem;
+    color:rgba(26,92,69,0.06);
+    transform:rotate(-12deg);
+    pointer-events:none;
+  }
+  .care-card-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    position:relative;
+    z-index:1;
+  }
+  .care-card-logo{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:.8rem;
+    font-weight:800;
+    letter-spacing:.5px;
+    color:var(--green);
+    text-transform:uppercase;
+  }
+  .care-card-logo i{color:var(--lime);}
+  .care-card-chip{
+    width:38px;
+    height:28px;
+    border-radius:6px;
+    background:linear-gradient(135deg,var(--gold-soft),var(--gold));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--green-deep);
+    font-size:.9rem;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .care-card-label{
+    position:relative;
+    z-index:1;
+    margin-top:20px;
+    font-size:.72rem;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    font-weight:700;
+  }
+  .care-card-name{
+    position:relative;
+    z-index:1;
+    margin-top:4px;
+    font-size:clamp(1.3rem,5vw,1.7rem);
+    font-weight:900;
+    letter-spacing:.5px;
+    color:var(--green);
+  }
+  .care-card-bottom{
+    position:relative;
+    z-index:1;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-top:22px;
+    gap:14px;
+    padding-top:16px;
+    border-top:1px dashed var(--border);
+  }
+  .cc-small{
+    font-size:.68rem;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    margin-bottom:4px;
+  }
+  .cc-value{
+    font-size:1rem;
+    font-weight:800;
+    color:var(--gold);
+  }
+  .care-card-note{
+    margin:14px 4px 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    text-align:center;
+    font-size:.85rem;
+    color:var(--text-muted);
+    line-height:1.5;
+  }
+  .care-card-note i{color:var(--green); flex-shrink:0;}
+
+  /* ---------- Section titles ---------- */
+  .section-title{
+    text-align:center;
+    font-size:clamp(1.3rem,4.5vw,1.7rem);
+    font-weight:800;
+    margin:44px 0 22px;
+    color:var(--green);
+  }
+  .section-title span{color:var(--gold);}
+
+  /* ---------- Message card ---------- */
+  .message-card{
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:26px 22px;
+    font-size:.98rem;
+    line-height:1.7;
+    color:var(--text);
+  }
+  .message-card strong{color:var(--green);}
+
+  /* ---------- Features grid ---------- */
+  .features-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  @media (min-width:700px){ .features-grid{grid-template-columns:repeat(3,1fr);} }
+
+  .feature-card{
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px 14px;
+    text-align:center;
+    box-shadow:var(--shadow-sm);
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+    cursor:default;
+  }
+  .feature-card:hover, .feature-card:active{
+    transform:translateY(-6px);
+    border-color:var(--gold);
+    box-shadow:var(--shadow);
+  }
+  .feature-card .icon{
+    width:56px; height:56px;
+    margin:0 auto 12px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--green);
+    color:var(--white);
+    font-size:1.4rem;
+  }
+  .feature-card .icon.c-teal{background:#4fa8b5;}
+  .feature-card .icon.c-gold{background:#dbb93f;}
+  .feature-card .icon.c-deep{background:#3f9b73;}
+  .feature-card .icon.c-olive{background:#9ec93f;}
+  .feature-card .label{
+    font-size:.88rem;
+    font-weight:700;
+    color:var(--text);
+    line-height:1.35;
+  }
+  .feature-card.assistance{
+    grid-column:1 / -1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    text-align:left;
+    background:var(--bg-soft);
+    border-color:var(--gold-soft);
+  }
+  .feature-card.assistance .icon{margin:0; flex-shrink:0; background:var(--gold);}
+
+  /* ---------- Parent message ---------- */
+  .parent-card{
+    margin-top:24px;
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow-sm);
+  }
+  .parent-card .photo{
+    width:100%;
+    max-height:460px;
+    object-fit:contain;
+    background:var(--bg-soft);
+    display:block;
+  }
+  .parent-card .body{
+    padding:24px 22px;
+    text-align:center;
+  }
+  .parent-card .heart{
+    font-size:1.6rem;
+    color:var(--gold);
+    margin-bottom:10px;
+    display:block;
+  }
+  .parent-card p{
+    font-size:.98rem;
+    line-height:1.7;
+    color:var(--text);
+    margin:0 0 8px;
+  }
+  .parent-card strong{color:var(--green);}
+
+  /* ---------- Support section ---------- */
+  .support-card{
+    margin-top:24px;
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+  }
+  .support-card .avatar{
+    flex-shrink:0;
+    width:52px; height:52px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--lime),var(--green));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.3rem;
+    color:var(--white);
+  }
+  .support-card p{
+    margin:0;
+    font-size:.92rem;
+    line-height:1.65;
+    color:var(--text-muted);
+  }
+  .support-card strong{color:var(--text);}
+
+  /* ---------- Sticky CTA ---------- */
+  .cta-zone{
+    margin-top:36px;
+    text-align:center;
+    position:relative;
+  }
+  .whatsapp-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    width:100%;
+    max-width:420px;
+    padding:18px 24px;
+    background:linear-gradient(135deg,#25D366,#1da851);
+    color:#fff;
+    font-size:1.08rem;
+    font-weight:800;
+    letter-spacing:.3px;
+    border:none;
+    border-radius:999px;
+    cursor:pointer;
+    box-shadow:0 14px 30px rgba(37,211,102,0.35);
+    transition:transform .18s var(--ease), box-shadow .18s var(--ease);
+    text-decoration:none;
+  }
+  .whatsapp-btn i{font-size:1.4rem;}
+  .whatsapp-btn:hover{transform:translateY(-3px); box-shadow:0 18px 36px rgba(37,211,102,0.45);}
+  .whatsapp-btn:active{transform:scale(.96) translateY(0); box-shadow:0 8px 16px rgba(37,211,102,0.35);}
+
+  .cta-sub{
+    margin-top:12px;
+    font-size:.8rem;
+    color:var(--text-muted);
+  }
+
+  .pulse-ring{
+    position:absolute;
+    left:50%; top:0;
+    transform:translateX(-50%);
+    width:100%; max-width:420px; height:60px;
+    border-radius:999px;
+    border:2px solid rgba(37,211,102,0.4);
+    animation:pulse 2.2s ease-out infinite;
+    pointer-events:none;
+  }
+  @keyframes pulse{
+    0%{opacity:.6; transform:translateX(-50%) scale(1);}
+    100%{opacity:0; transform:translateX(-50%) scale(1.15);}
+  }
+
+  /* ---------- Footer / stats ---------- */
+  footer{
+    margin-top:40px;
+    text-align:center;
+    color:var(--text-muted);
+    font-size:.75rem;
+  }
+  .stats-bar{
+    display:none;
+    margin:18px auto 0;
+    gap:16px;
+    align-items:center;
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:6px 16px;
+    font-size:.72rem;
+    color:var(--text-muted);
+  }
+  .stats-bar span{display:flex; align-items:center; gap:5px;}
+  .stats-bar i{color:var(--gold); font-size:.8rem;}
+  .stats-bar.is-admin{display:inline-flex;}
+
+  #adminToggle{
+    position:fixed;
+    right:0;
+    bottom:0;
+    width:34px;
+    height:34px;
+    padding:0;
+    margin:0;
+    border:none;
+    background:transparent;
+    opacity:0;
+    cursor:default;
+    z-index:999;
+  }
+
+  /* utility fade-in on scroll */
+  .reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .7s var(--ease), transform .7s var(--ease);
+  }
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  a{color:inherit;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <img class="logo-mark" src="assets/logo-star-assurances.png" alt="STAR Assurances">
+    <div class="badge"><i class="fa-solid fa-star"></i> NOUVEAUTÉ</div>
+    <h1 class="title">STARCARE <span class="accent">ÉTUDIANT</span></h1>
+    <p class="subtitle">L'assurance santé qui accompagne votre réussite</p>
+    <div class="allstar-badge"><i class="fa-solid fa-star"></i> ALLO STAR 70 255 000</div>
+  </header>
+
+  <div class="hero-photo reveal">
+    <img src="assets/hero-photo.jpg" alt="Étudiant souriant avec sac à dos, assurance STARCARE Étudiant STAR Assurances" loading="lazy">
+  </div>
+
+  <section class="price-card reveal">
+    <div class="label">Cotisation annuelle</div>
+    <div class="price-value">
+      <span class="amount">250</span>
+      <span class="unit">DT TTC</span>
+      <span class="per">/ an</span>
+    </div>
+    <div class="price-note"><i class="fa-solid fa-shield-halved"></i> Couverture santé complète, valable 1 an</div>
+  </section>
+
+  <div class="care-card reveal">
+    <i class="fa-solid fa-star care-card-watermark"></i>
+    <div class="care-card-top">
+      <span class="care-card-logo"><i class="fa-solid fa-star"></i> STAR Assurances</span>
+      <span class="care-card-chip"><i class="fa-solid fa-microchip"></i></span>
+    </div>
+    <div class="care-card-label">Carte de prise en charge</div>
+    <div class="care-card-name">STARCARE ÉTUDIANT</div>
+    <div class="care-card-bottom">
+      <div>
+        <div class="cc-small">Cotisation</div>
+        <div class="cc-value">250 DT TTC / an</div>
+      </div>
+      <div>
+        <div class="cc-small">Validité</div>
+        <div class="cc-value">1 an</div>
+      </div>
+    </div>
+  </div>
+  <p class="care-card-note reveal"><i class="fa-solid fa-circle-check"></i> Présentez votre carte STARCARE chez nos prestataires partenaires pour un accès aux soins sans avance de frais.</p>
+
+  <h2 class="section-title">Ce que couvre <span>STARCARE Étudiant</span></h2>
+  <div class="features-grid reveal">
+    <div class="feature-card">
+      <div class="icon"><i class="fa-solid fa-stethoscope"></i></div>
+      <div class="label">Consultations médicales</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon c-teal"><i class="fa-solid fa-x-ray"></i></div>
+      <div class="label">Analyses et radiologie</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon c-gold"><i class="fa-solid fa-pills"></i></div>
+      <div class="label">Pharmacie</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon c-deep"><i class="fa-solid fa-bed-pulse"></i></div>
+      <div class="label">Hospitalisation</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon c-olive"><i class="fa-solid fa-tooth"></i></div>
+      <div class="label">Soins dentaires</div>
+    </div>
+    <div class="feature-card assistance">
+      <div class="icon"><i class="fa-solid fa-headset"></i></div>
+      <div class="label">Assistance disponible 24h/24 et 7j/7</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Notre <span>engagement</span></h2>
+  <div class="message-card reveal">
+    🎓 Nouvelle rentrée, nouvelles ambitions. Pour accompagner les étudiants tout au long de leur parcours universitaire, STAR Assurances lance <strong>STARCARE Étudiant</strong>, une assurance santé spécialement conçue pour répondre aux besoins de la vie étudiante. Parce qu'entre les cours, les examens et les projets d'avenir, la santé ne devrait jamais être une source d'inquiétude.
+  </div>
+
+  <div class="parent-card reveal">
+    <img class="photo" src="assets/etudiante-photo.jpg" alt="Étudiante souriante sur le campus, assurée STARCARE Étudiant">
+    <div class="body">
+      <i class="fa-solid fa-heart heart"></i>
+      <p>Parents, la tranquillité d'esprit commence par la santé de vos enfants. Pour seulement <strong>250 DT TTC / an</strong>, offrez à votre étudiant une protection complète face aux imprévus de la vie universitaire — consultations, pharmacie, hospitalisation et bien plus.</p>
+      <p>Un petit geste aujourd'hui, une grande sérénité pour toute l'année.</p>
+    </div>
+  </div>
+
+  <div class="support-card reveal">
+    <div class="avatar"><i class="fa-solid fa-headset"></i></div>
+    <p><strong>Une question ? Nous vous rappelons vite.</strong><br>
+    Notre équipe de conseillers spécialistes est à votre écoute pour vous mettre en contact en moins de 30 min. Ils sont à votre écoute pour toute information et conseils.</p>
+  </div>
+
+  <div class="cta-zone reveal">
+    <div class="pulse-ring" aria-hidden="true"></div>
+    <a href="#" id="whatsappBtn" class="whatsapp-btn">
+      <i class="fa-brands fa-whatsapp"></i>
+      Discuter sur WhatsApp
+    </a>
+    <div class="cta-sub">Réponse garantie en moins de 30 minutes</div>
+  </div>
+
+  <footer>
+    <div>© 2026 STAR Assurances — STARCARE Étudiant</div>
+    <div class="stats-bar" id="statsBar">
+      <span><i class="fa-solid fa-eye"></i> <span id="viewCount">0</span> vues</span>
+      <span><i class="fa-brands fa-whatsapp"></i> <span id="clickCount">0</span> clics</span>
+    </div>
+  </footer>
+
+  <button type="button" id="adminToggle" aria-hidden="true" tabindex="-1"></button>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- CONFIG ----------
+  var WHATSAPP_NUMBER = "21623502362"; // no leading + or 00
+  var WELCOME_MESSAGE = "Bonjour ! 👋 Je suis intéressé(e) par l'assurance STARCARE Étudiant (250 DT TTC / an). Pouvez-vous me donner plus d'informations ? Merci 🎓";
+
+  var waLink = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(WELCOME_MESSAGE);
+  var whatsappBtn = document.getElementById("whatsappBtn");
+  whatsappBtn.setAttribute("href", waLink);
+  whatsappBtn.setAttribute("target", "_blank");
+  whatsappBtn.setAttribute("rel", "noopener noreferrer");
+
+  // ---------- STATS (localStorage) ----------
+  var VIEW_KEY = "starcare_views";
+  var CLICK_KEY = "starcare_clicks";
+
+  function getCount(key){
+    var v = parseInt(localStorage.getItem(key), 10);
+    return isNaN(v) ? 0 : v;
+  }
+  function setCount(key, val){
+    localStorage.setItem(key, String(val));
+  }
+  function renderStats(){
+    document.getElementById("viewCount").textContent = getCount(VIEW_KEY);
+    document.getElementById("clickCount").textContent = getCount(CLICK_KEY);
+  }
+
+  // stats are hidden from regular visitors; admin reveals them via the
+  // invisible corner button (bottom-right) or ?admin=1 in the URL
+  var ADMIN_FLAG = "starcare_admin";
+  var statsBar = document.getElementById("statsBar");
+
+  function applyAdminState(){
+    statsBar.classList.toggle("is-admin", localStorage.getItem(ADMIN_FLAG) === "1");
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  if(params.get("admin") === "1"){
+    localStorage.setItem(ADMIN_FLAG, "1");
+  }
+  applyAdminState();
+
+  document.getElementById("adminToggle").addEventListener("click", function(){
+    var isAdmin = localStorage.getItem(ADMIN_FLAG) === "1";
+    localStorage.setItem(ADMIN_FLAG, isAdmin ? "0" : "1");
+    applyAdminState();
+  });
+
+  // page view tracking (once per session to avoid inflating on SPA-like reloads)
+  var SESSION_VIEW_FLAG = "starcare_view_logged_session";
+  if(!sessionStorage.getItem(SESSION_VIEW_FLAG)){
+    setCount(VIEW_KEY, getCount(VIEW_KEY) + 1);
+    sessionStorage.setItem(SESSION_VIEW_FLAG, "1");
+  }
+  renderStats();
+
+  // click tracking
+  whatsappBtn.addEventListener("click", function(){
+    setCount(CLICK_KEY, getCount(CLICK_KEY) + 1);
+    renderStats();
+    try{
+      console.log("[STARCARE tracking] WhatsApp CTA clicked at " + new Date().toISOString());
+    }catch(e){}
+  });
+
+  // micro-interaction: scale on press
+  whatsappBtn.addEventListener("pointerdown", function(){
+    whatsappBtn.style.transform = "scale(.96)";
+  });
+  ["pointerup","pointerleave","pointercancel"].forEach(function(evt){
+    whatsappBtn.addEventListener(evt, function(){
+      whatsappBtn.style.transform = "";
+    });
+  });
+
+  // scroll reveal
+  var revealEls = document.querySelectorAll(".reveal");
+  if("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add("in");
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:.15});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add("in"); });
+  }
+})();
+</script>
+
+</body>
+</html>
