@@ -6,6 +6,7 @@
 <title>STARCARE Étudiant | STAR Assurances</title>
 <meta name="description" content="STARCARE Étudiant - L'assurance santé qui accompagne votre réussite. 250 DT TTC / an.">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preconnect" href="https://cdjjtrpmxrqlmtsflipt.supabase.co">
 <link rel="preload" href="assets/logo-star-assurances.png" as="image">
 <link rel="preload" href="assets/hero-photo.webp" as="image">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" media="print" onload="this.media='all'">
@@ -710,6 +711,7 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
   "use strict";
@@ -726,11 +728,14 @@
     btn.setAttribute("rel", "noopener noreferrer");
   });
 
-  // ---------- STATS (shared across all devices via a free counter API) ----------
+  // ---------- STATS (shared across all devices via Supabase) ----------
   // localStorage only tracks the current browser/device; to see one total
-  // across every visitor's phone/desktop we need a value stored server-side.
-  // countapi.xyz is a free, no-signup hit-counter API used here for that.
-  var COUNTER_NS = "starcare-etudiant-star-assurances-2026";
+  // across every visitor's phone/desktop the count has to live in a real
+  // shared database. See supabase-setup.sql for the table/function this relies on.
+  var SUPABASE_URL = "https://cdjjtrpmxrqlmtsflipt.supabase.co";
+  var SUPABASE_ANON_KEY = "sb_publishable_E7z7dk16Zuro4SXCTFTIJg_1Itb8066";
+  var supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
   var VIEW_KEY = "views";
   var CLICK_KEY = "clicks";
   var CACHE_PREFIX = "starcare_cache_"; // last-known values, for instant paint + offline fallback
@@ -751,19 +756,28 @@
     renderCount(VIEW_KEY, cacheGet(VIEW_KEY));
     renderCount(CLICK_KEY, cacheGet(CLICK_KEY));
   }
-  // increments the shared remote counter by 1 and repaints with the new total
+  // increments the shared counter in Supabase by 1 and repaints with the new total
   function remoteHit(key){
-    fetch("https://api.countapi.xyz/hit/" + COUNTER_NS + "/" + key)
-      .then(function(r){ return r.json(); })
-      .then(function(data){ renderCount(key, data.value); })
-      .catch(function(){ /* offline / API unreachable: keep last cached value */ });
+    if(!supabase) return;
+    supabase.rpc("increment_counter", { counter_key: key }).then(function(res){
+      if(!res.error && typeof res.data === "number") renderCount(key, res.data);
+    }).catch(function(){ /* offline / unreachable: keep last cached value */ });
   }
   // re-reads the current shared total without incrementing (used to refresh the admin panel)
   function remoteRefresh(key){
-    fetch("https://api.countapi.xyz/get/" + COUNTER_NS + "/" + key)
-      .then(function(r){ return r.json(); })
-      .then(function(data){ if(data && typeof data.value === "number") renderCount(key, data.value); })
-      .catch(function(){});
+    if(!supabase) return;
+    supabase.from("starcare_counters").select("count").eq("key", key).single().then(function(res){
+      if(!res.error && res.data) renderCount(key, res.data.count);
+    }).catch(function(){});
+  }
+  // live push: any visitor's hit updates every open admin panel instantly, no polling
+  if(supabase){
+    supabase
+      .channel("starcare-counters-live")
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "starcare_counters" }, function(payload){
+        renderCount(payload.new.key, payload.new.count);
+      })
+      .subscribe();
   }
 
   // stats are hidden from regular visitors; admin reveals them via the
