@@ -46,6 +46,54 @@
   @media (min-width:768px){ .wrap{max-width:720px;} }
   @media (min-width:1100px){ .wrap{max-width:980px;} }
 
+  /* ---------- Sticky top bar ---------- */
+  .top-bar{
+    position:sticky;
+    top:0;
+    z-index:80;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+    padding:10px 16px;
+    box-shadow:var(--shadow-sm);
+  }
+  .top-bar-text{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:.78rem;
+    font-weight:600;
+    color:var(--text-muted);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .top-bar-text i{color:var(--green); flex-shrink:0;}
+  .top-bar-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    flex-shrink:0;
+    background:linear-gradient(135deg,#25D366,#1da851);
+    color:#fff;
+    font-weight:800;
+    font-size:.82rem;
+    padding:9px 16px;
+    border-radius:999px;
+    text-decoration:none;
+    white-space:nowrap;
+    box-shadow:0 6px 16px rgba(37,211,102,0.3);
+    transition:transform .15s var(--ease);
+  }
+  .top-bar-btn:active{transform:scale(.94);}
+  @media (max-width:400px){
+    .top-bar-text{font-size:.7rem;}
+  }
+
   /* ---------- Header ---------- */
   header{
     text-align:center;
@@ -537,6 +585,13 @@
 </head>
 <body>
 
+<div class="top-bar">
+  <div class="top-bar-text"><i class="fa-solid fa-headset"></i> Un conseiller est à votre écoute sur nos lignes</div>
+  <a href="#" id="whatsappBtnTop" class="top-bar-btn wa-cta">
+    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+  </a>
+</div>
+
 <div class="wrap">
 
   <header>
@@ -632,7 +687,7 @@
 
   <div class="cta-zone reveal">
     <div class="pulse-ring" aria-hidden="true"></div>
-    <a href="#" id="whatsappBtn" class="whatsapp-btn">
+    <a href="#" id="whatsappBtn" class="whatsapp-btn wa-cta">
       <i class="fa-brands fa-whatsapp"></i>
       Discuter sur WhatsApp
     </a>
@@ -660,10 +715,12 @@
   var WELCOME_MESSAGE = "Bonjour ! 👋 Je suis intéressé(e) par l'assurance STARCARE Étudiant (250 DT TTC / an). Pouvez-vous me donner plus d'informations ? Merci 🎓";
 
   var waLink = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(WELCOME_MESSAGE);
-  var whatsappBtn = document.getElementById("whatsappBtn");
-  whatsappBtn.setAttribute("href", waLink);
-  whatsappBtn.setAttribute("target", "_blank");
-  whatsappBtn.setAttribute("rel", "noopener noreferrer");
+  var waCtas = document.querySelectorAll(".wa-cta");
+  waCtas.forEach(function(btn){
+    btn.setAttribute("href", waLink);
+    btn.setAttribute("target", "_blank");
+    btn.setAttribute("rel", "noopener noreferrer");
+  });
 
   // ---------- STATS (localStorage) ----------
   var VIEW_KEY = "starcare_views";
@@ -710,22 +767,23 @@
   }
   renderStats();
 
-  // click tracking
-  whatsappBtn.addEventListener("click", function(){
-    setCount(CLICK_KEY, getCount(CLICK_KEY) + 1);
-    renderStats();
-    try{
-      console.log("[STARCARE tracking] WhatsApp CTA clicked at " + new Date().toISOString());
-    }catch(e){}
-  });
+  // click tracking + micro-interaction: scale on press (all WhatsApp CTAs)
+  waCtas.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      setCount(CLICK_KEY, getCount(CLICK_KEY) + 1);
+      renderStats();
+      try{
+        console.log("[STARCARE tracking] WhatsApp CTA clicked at " + new Date().toISOString());
+      }catch(e){}
+    });
 
-  // micro-interaction: scale on press
-  whatsappBtn.addEventListener("pointerdown", function(){
-    whatsappBtn.style.transform = "scale(.96)";
-  });
-  ["pointerup","pointerleave","pointercancel"].forEach(function(evt){
-    whatsappBtn.addEventListener(evt, function(){
-      whatsappBtn.style.transform = "";
+    btn.addEventListener("pointerdown", function(){
+      btn.style.transform = "scale(.96)";
+    });
+    ["pointerup","pointerleave","pointercancel"].forEach(function(evt){
+      btn.addEventListener(evt, function(){
+        btn.style.transform = "";
+      });
     });
   });
 
